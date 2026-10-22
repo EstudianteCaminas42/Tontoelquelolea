@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tontoelquelolea.com</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #07070a;
+    --linea: #f5f7ff;
+    --brillo: rgba(245, 247, 255, 0.55);
+    --texto: #e9ebf5;
+    --suave: #8a8fa3;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html, body { margin: 0; background: var(--bg); }
+  body {
+    min-height: 100vh;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    color: var(--texto);
+    padding: 56px 20px 64px;
+  }
+  header { max-width: 960px; margin: 0 auto 48px; text-align: center; }
+  h1 {
+    margin: 0 0 14px;
+    font-weight: 300;
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    text-shadow: 0 0 12px var(--brillo);
+  }
+  .raya {
+    width: 120px; height: 1px; margin: 0 auto 16px;
+    background: var(--linea);
+    box-shadow: 0 0 8px var(--linea), 0 0 20px var(--brillo);
+  }
+  header p { margin: 0; color: var(--suave); letter-spacing: 0.08em; font-size: 0.95rem; }
+
+  .rejilla {
+    max-width: 960px; margin: 0 auto;
+    display: grid; gap: 22px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  .tarjeta {
+    display: flex; flex-direction: column; justify-content: space-between;
+    min-height: 150px; padding: 22px;
+    text-decoration: none; color: var(--texto);
+    border: 1px solid var(--linea);
+    border-radius: 6px;
+    box-shadow: 0 0 6px var(--brillo), inset 0 0 10px rgba(245, 247, 255, 0.08);
+    transition: box-shadow .25s ease, transform .25s ease, background .25s ease;
+  }
+  .tarjeta:hover, .tarjeta:focus-visible {
+    transform: translateY(-3px);
+    background: rgba(245, 247, 255, 0.04);
+    box-shadow: 0 0 14px var(--linea), 0 0 34px var(--brillo), inset 0 0 16px rgba(245, 247, 255, 0.12);
+    outline: none;
+  }
+  .tarjeta h2 {
+    margin: 0 0 8px; font-weight: 400; font-size: 1.2rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .tarjeta .desc { margin: 0; color: var(--suave); font-size: 0.9rem; line-height: 1.4; }
+  .tarjeta .jugar {
+    margin-top: 18px; font-size: 0.8rem; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--linea);
+  }
+  .tarjeta .jugar::after { content: " →"; }
+  footer { max-width: 960px; margin: 56px auto 0; text-align: center; color: var(--suave); font-size: 0.8rem; letter-spacing: 0.1em; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Minijuegos</h1>
+  <div class="raya"></div>
+  <p>Elige un juego y a jugar</p>
+</header>
+
+<main class="rejilla" id="rejilla"></main>
+
+<footer></footer>
+
+<script>
+  /* ============================================================
+     ✏️  AQUÍ EDITAS LOS JUEGOS
+     Cada bloque { ... } es una tarjeta. Cambia:
+       titulo      → el nombre que se ve en la tarjeta
+       url         → la dirección a la que redirige al hacer clic
+       descripcion → texto pequeño (déjalo "" si no quieres)
+       nuevaPestana→ true abre en otra pestaña, false en la misma
+     Para añadir un juego, copia un bloque y pégalo (con su coma).
+     Para quitar uno, borra su bloque entero.
+     ============================================================ */
+  const JUEGOS = [
+    { titulo: "Alejandro", url: "https://example.com/juego1", descripcion: "Creado por ...", nuevaPestana: false },
+    { titulo: "Juan", url: "http://10.112.10.146:3000/index.html", descripcion: "Creado por ...", nuevaPestana: false },
+    { titulo: "Miquel", url: "http://10.112.10.143:7777/", descripcion: "Creado por ...", nuevaPestana: false },
+    { titulo: "Jaime", url: "https://example.com/juego4", descripcion: "Creado por ...", nuevaPestana: false },
+    { titulo: "Javier", url: "https://casinoconcolegas.onrender.com/", descripcion: "Creado por ...", nuevaPestana: false },
+    { titulo: "Jorge", url: "http://10.112.10.142:537/sangre-de-tartaro-3d.html", descripcion: "Creado por ...", nuevaPestana: false }
+  ];
+  /* ============================================================ */
+
+  const rejilla = document.getElementById("rejilla");
+  JUEGOS.forEach(function (j) {
+    const a = document.createElement("a");
+    a.className = "tarjeta";
+    a.href = j.url;
+    if (j.nuevaPestana) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
+
+    const texto = document.createElement("div");
+    const h2 = document.createElement("h2");
+    h2.textContent = j.titulo;
+    texto.appendChild(h2);
+    if (j.descripcion) {
+      const p = document.createElement("p");
+      p.className = "desc";
+      p.textContent = j.descripcion;
+      texto.appendChild(p);
+    }
+
+    const jugar = document.createElement("span");
+    jugar.className = "jugar";
+    jugar.textContent = "Jugar";
+
+    a.appendChild(texto);
+    a.appendChild(jugar);
+    rejilla.appendChild(a);
+  });
+</script>
+</body>
+</html>
